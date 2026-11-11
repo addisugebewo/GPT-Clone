@@ -14,8 +14,7 @@ import ChatInput from './components/ChatInput/ChatInput';
 
 import './App.css';
 
-// Base URL of our backend API
-// All API requests will use this URL
+
 const API_BASE_URL = "http://localhost:3400/api";
 
 function App() {
@@ -27,8 +26,6 @@ function App() {
  
   const [isLoading, setIsLoading] = useState(false);
 
-  // useRef creates a reference to the bottom of the message list
-  // We use it to automatically scroll down when new messages appear
   const messagesEndRef = useRef(null);
 
 
@@ -63,13 +60,13 @@ function App() {
       // Check whether the backend request was successful
       if (response.data.success) {
 
-        // Save the retrieved conversations in React state
+        
         setConversations(response.data.data);
       }
 
     } catch (error) {
 
-      // Display an error in the browser console if the request fails
+      
       console.error("Error fetching conversations:", error);
     }
   };
@@ -78,19 +75,18 @@ function App() {
   // FUNCTION 5: Send a new user message to the backend
   const handleSendMessage = async (question) => {
 
-    // Create a temporary user message
-    // Date.now() generates a unique ID for displaying the message immediately
+
     const tempUserMessage = {
       id: Date.now(),
       role: "user",
       content: question,
     };
 
-    // Immediately display the user's message in the chat interface
+    
     // This improves the user experience while waiting for the backend
     setConversations((prev) => [...prev, tempUserMessage]);
 
-    // Activate the loading state while waiting for Gemini's response
+    
     setIsLoading(true);
 
     try {
@@ -112,8 +108,6 @@ function App() {
         // Update the conversation list
         setConversations((prev) => {
 
-          // Remove the temporary message because the backend
-          // has now returned the actual saved user message
           const filtered = prev.filter(
             (msg) => msg.id !== tempUserMessage.id
           );
@@ -128,8 +122,7 @@ function App() {
       // Handle errors if the backend or Gemini API request fails
       console.error("Error posting conversation:", error);
 
-      // Get the error message from the backend if available
-      // Otherwise, display a default error message
+   
       const errorMessage =
         error.response?.data?.message ||
         "There was an error generating a response.";
@@ -147,7 +140,7 @@ function App() {
 
     } finally {
 
-      // Stop the loading state whether the request succeeds or fails
+     
       setIsLoading(false);
     }
   };
